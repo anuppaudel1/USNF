@@ -1,6 +1,6 @@
-# 🇺🇸🇳🇵 US-Nepal Fantasy Premier League 2024/25 Tracker
+# 🇺🇸🇳🇵 US-Nepal Fantasy Premier League 2025/26 Tracker
 
-Welcome to the official tracking site for the **US-Nepal Fantasy Premier League (FPL) 2024/25 Season**.
+Welcome to the official tracking site for the **US-Nepal Fantasy Premier League (FPL) 2025/26 Season**.
 
 This platform brings together FPL enthusiasts across the US and Nepal to participate in a fun, competitive environment across multiple leagues.
 

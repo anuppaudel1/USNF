@@ -65,42 +65,125 @@
       <li>5th: $50</li>
     </ul>
   </section>
-  
-<section>
+
+  <section>
   <h2>📊 Live Tracking Dashboard</h2>
-  <p>The tracker below is updated dynamically via Google Sheets</p>
+  <p>The tracker below is updated dynamically via Google Sheets. Make sure the sheet is shared with "Anyone with the link can view" access.</p>
 
-  <h3>Classic League</h3>
-  <iframe 
-    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDnaHPLvrMsTxr-8N5bTY0Ci8EDgRFdCDMvHvkXIGfwAWaBCzHShf4rvjyoiNqwqfnYKRa5BtraDQg/pubhtml?gid=1210337705&single=true&widget=true&headers=false" 
-    width="100%" 
-    height="600" 
-    frameborder="0">
-  </iframe>
+  <style>
+    /* Tab container */
+    .tab {
+      overflow: hidden;
+      border-bottom: 3px solid #ccc;
+      margin-bottom: 10px;
+    }
 
-  <h3>Head-to-Head League</h3>
-  <iframe 
-    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDnaHPLvrMsTxr-8N5bTY0Ci8EDgRFdCDMvHvkXIGfwAWaBCzHShf4rvjyoiNqwqfnYKRa5BtraDQg/pubhtml?gid=362602962&single=true&widget=true&headers=false" 
-    width="100%" 
-    height="600" 
-    frameborder="0">
-  </iframe>
+    /* Tab buttons */
+    .tab button {
+      background-color: #f0f0f0;
+      border: none;
+      outline: none;
+      padding: 14px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 6px 6px 0 0;
+      margin-right: 6px;
+      color: #444;
+      box-shadow: inset 0 -3px 0 transparent;
+    }
 
-  <h3>Survival League</h3>
-  <iframe 
-    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDnaHPLvrMsTxr-8N5bTY0Ci8EDgRFdCDMvHvkXIGfwAWaBCzHShf4rvjyoiNqwqfnYKRa5BtraDQg/pubhtml?gid=1113021135&single=true&widget=true&headers=false" 
-    width="100%" 
-    height="600" 
-    frameborder="0">
-  </iframe>
+    /* Individual colors for each tab */
+    .tab button.classic {
+      --tab-color: #1e90ff; /* Dodger Blue */
+    }
+    .tab button.h2h {
+      --tab-color: #28a745; /* Green */
+    }
+    .tab button.survival {
+      --tab-color: #ff8c00; /* Dark Orange */
+    }
+    .tab button.ghost {
+      --tab-color: #6f42c1; /* Purple */
+    }
 
-  <h3>Ghost League</h3>
-  <iframe 
-    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDnaHPLvrMsTxr-8N5bTY0Ci8EDgRFdCDMvHvkXIGfwAWaBCzHShf4rvjyoiNqwqfnYKRa5BtraDQg/pubhtml?gid=1404348850&single=true&widget=true&headers=false" 
-    width="100%" 
-    height="600" 
-    frameborder="0">
-  </iframe>
+    /* Default tab color */
+    .tab button {
+      border-bottom: 3px solid transparent;
+    }
+
+    /* Active tab styles */
+    .tab button.active {
+      color: white;
+      background-color: var(--tab-color);
+      box-shadow: inset 0 -3px 0 var(--tab-color);
+      border-bottom: 3px solid var(--tab-color);
+    }
+
+    /* Hover effect */
+    .tab button:hover:not(.active) {
+      background-color: #ddd;
+      color: var(--tab-color);
+    }
+
+    /* Tab content styling */
+    .tabcontent {
+      display: none;
+      padding: 10px 0;
+    }
+
+    .tabcontent iframe {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #ccc;
+      border-radius: 0 0 6px 6px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+    }
+  </style>
+
+  <div class="tab" role="tablist" aria-label="Fantasy League Tabs">
+    <button class="tablinks classic active" onclick="openLeague(event, 'Classic')" role="tab" aria-selected="true" aria-controls="Classic" id="tab-classic">Classic League</button>
+    <button class="tablinks h2h" onclick="openLeague(event, 'H2H')" role="tab" aria-selected="false" aria-controls="H2H" id="tab-h2h">Head-to-Head League</button>
+    <button class="tablinks survival" onclick="openLeague(event, 'Survival')" role="tab" aria-selected="false" aria-controls="Survival" id="tab-survival">Survival League</button>
+    <button class="tablinks ghost" onclick="openLeague(event, 'Ghost')" role="tab" aria-selected="false" aria-controls="Ghost" id="tab-ghost">Ghost League</button>
+  </div>
+
+  <div id="Classic" class="tabcontent" role="tabpanel" aria-labelledby="tab-classic" style="display: block;">
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDnaHPLvrMsTxr-8N5bTY0Ci8EDgRFdCDMvHvkXIGfwAWaBCzHShf4rvjyoiNqwqfnYKRa5BtraDQg/pubhtml?gid=1210337705&single=true&widget=true&headers=false" title="Classic League Standings"></iframe>
+  </div>
+
+  <div id="H2H" class="tabcontent" role="tabpanel" aria-labelledby="tab-h2h">
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDnaHPLvrMsTxr-8N5bTY0Ci8EDgRFdCDMvHvkXIGfwAWaBCzHShf4rvjyoiNqwqfnYKRa5BtraDQg/pubhtml?gid=362602962&single=true&widget=true&headers=false" title="Head-to-Head League Standings"></iframe>
+  </div>
+
+  <div id="Survival" class="tabcontent" role="tabpanel" aria-labelledby="tab-survival">
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDnaHPLvrMsTxr-8N5bTY0Ci8EDgRFdCDMvHvkXIGfwAWaBCzHShf4rvjyoiNqwqfnYKRa5BtraDQg/pubhtml?gid=1113021135&single=true&widget=true&headers=false" title="Survival League Standings"></iframe>
+  </div>
+
+  <div id="Ghost" class="tabcontent" role="tabpanel" aria-labelledby="tab-ghost">
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDnaHPLvrMsTxr-8N5bTY0Ci8EDgRFdCDMvHvkXIGfwAWaBCzHShf4rvjyoiNqwqfnYKRa5BtraDQg/pubhtml?gid=1404348850&single=true&widget=true&headers=false" title="Ghost League Standings"></iframe>
+  </div>
+
+  <script>
+    function openLeague(evt, leagueName) {
+      // Hide all tabcontent
+      const tabcontent = document.querySelectorAll('.tabcontent');
+      tabcontent.forEach(tc => tc.style.display = 'none');
+
+      // Remove active class and update aria-selected for all tabs
+      const tablinks = document.querySelectorAll('.tablinks');
+      tablinks.forEach(tl => {
+        tl.classList.remove('active');
+        tl.setAttribute('aria-selected', 'false');
+      });
+
+      // Show selected tabcontent and set active class and aria-selected
+      document.getElementById(leagueName).style.display = 'block';
+      evt.currentTarget.classList.add('active');
+      evt.currentTarget.setAttribute('aria-selected', 'true');
+    }
+  </script>
 </section>
 
   <section>

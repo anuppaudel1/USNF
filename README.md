@@ -22,7 +22,7 @@ Each league has its own tab with live updates and participant tracking via Googl
 
 ## 🔗 Live Website
 
-Visit the live tracker: [https://<your-username>.github.io/us-nepal-fpl-tracker/](https://anuppaudel1.github.io/us-nepal-fpl-tracker/)
+Visit the live tracker: [https://<your-username>.github.io/us-nepal-fpl-tracker/](https://anuppaudel1.github.io/USNF/)
 
 ## 📣 Contributions
 

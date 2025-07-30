@@ -5,80 +5,142 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>US Nepal Fantasy Premier League 2025/26</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f7fa; }
-    h1, h2 { color: #2c3e50; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+      color: #333;
+    }
 
-    /* Container for dropdowns */
+    /* Center content and apply background */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #2c3e50;
+      font-size: 36px;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    h2 {
+      color: #34495e;
+      font-size: 28px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    /* Dropdown container styling */
     .dropdown-container {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 20px;
-      max-width: 600px;
-      margin: 0 auto;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
     }
 
     /* Style for individual dropdown */
     select {
-      padding: 10px;
-      font-size: 16px;
-      margin: 0 10px;
-      border-radius: 5px;
+      padding: 12px 20px;
+      font-size: 18px;
+      margin: 10px;
+      border-radius: 8px;
       border: 1px solid #ccc;
-      width: 48%;
+      width: 250px;
+      max-width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    /* Hover and focus effect for dropdowns */
+    select:hover, select:focus {
+      border-color: #1e90ff;
+      outline: none;
+      box-shadow: 0 0 10px rgba(30, 144, 255, 0.4);
     }
 
     /* Table Styling */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ccc;
-      text-align: left;
-    }
-    th { background-color: #34495e; color: white; }
-    section { margin-bottom: 40px; }
-    
-    /* Button style for table and dropdown headers */
-    h2 {
-      font-size: 24px;
+      margin-top: 40px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+      font-size: 16px;
+    }
+
+    th {
+      background-color: #34495e;
+      color: white;
+    }
+
+    td {
+      background-color: #f9f9f9;
+    }
+
+    td:hover {
+      background-color: #eaeaea;
+    }
+
+    /* Section padding */
+    section {
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+      color: #888;
+    }
   </style>
 </head>
 <body>
-  <h1>US Nepal Fantasy Premier League 2025/26</h1>
+  <div class="container">
+    <h1>US Nepal Fantasy Premier League 2025/26</h1>
 
-  <section>
-    <h2>📊 Select League to View Standings</h2>
-    <div class="dropdown-container">
-      <div>
-        <label for="leagueDropdown">Select League: </label>
-        <select id="leagueDropdown" onchange="updateLeague()">
-          <option value="USNF_2025_Classic">USNF_2025_Classic</option>
-          <option value="USNF_2025_Survival">USNF_2025_Survival</option>
-          <option value="USNF_2025_Ghost">USNF_2025_Ghost</option>
-          <option value="USNF_2025_H2H">USNF_2025_H2H</option>
-        </select>
+    <section>
+      <h2>📊 Select League and Gameweek to View Standings</h2>
+      <div class="dropdown-container">
+        <div>
+          <label for="leagueDropdown">Select League: </label>
+          <select id="leagueDropdown" onchange="updateLeague()">
+            <option value="USNF_2025_Classic">USNF_2025_Classic</option>
+            <option value="USNF_2025_Survival">USNF_2025_Survival</option>
+            <option value="USNF_2025_Ghost">USNF_2025_Ghost</option>
+            <option value="USNF_2025_H2H">USNF_2025_H2H</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="gameweekDropdown">Select Gameweek: </label>
+          <select id="gameweekDropdown" disabled>
+            <!-- Gameweek Options will be added dynamically -->
+          </select>
+        </div>
       </div>
+    </section>
 
-      <div>
-        <label for="gameweekDropdown">Gameweek: </label>
-        <select id="gameweekDropdown" disabled>
-          <!-- This dropdown will be dynamically set to the current GW -->
-        </select>
+    <section>
+      <h2>📊 Live Tracking Dashboard</h2>
+      <div id="leagueContent" class="loading">
+        <!-- Standings will be dynamically inserted here -->
+        Loading data...
       </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>📊 Live Tracking Dashboard</h2>
-    <div id="leagueContent">
-      <!-- Standings will be dynamically inserted here -->
-    </div>
-  </section>
+    </section>
+  </div>
 
   <script>
     // FPL Season Start Date (adjust if necessary for the exact year)

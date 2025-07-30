@@ -18,10 +18,23 @@
   <h1>US Nepal Fantasy Premier League 2025/26</h1>
 
   <section>
-    <h2>📊 Select Gameweek to View Standings</h2>
-    <select id="gameweekDropdown" onchange="updateGameweek()">
-      <!-- Gameweek Options will be added dynamically -->
-    </select>
+    <h2>📊 Select League and Gameweek to View Standings</h2>
+    <div>
+      <label for="leagueDropdown">Select League: </label>
+      <select id="leagueDropdown" onchange="updateLeague()">
+        <option value="USNF_2025_Classic">USNF_2025_Classic</option>
+        <option value="USNF_2025_Survival">USNF_2025_Survival</option>
+        <option value="USNF_2025_Ghost">USNF_2025_Ghost</option>
+        <option value="USNF_2025_H2H">USNF_2025_H2H</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="gameweekDropdown">Select Gameweek: </label>
+      <select id="gameweekDropdown" onchange="updateGameweek()">
+        <!-- Gameweek Options will be added dynamically -->
+      </select>
+    </div>
   </section>
 
   <section>
@@ -32,6 +45,18 @@
   </section>
 
   <script>
+    // Set the current Gameweek based on FPL schedule (or set to a default)
+    const currentGW = 2; // Default to GW2 for this example
+
+    // League data mapping
+    const leagues = {
+      "USNF_2025_Classic": { id: "523974", type: "classic" },
+      "USNF_2025_Survival": { id: "523980", type: "classic" },
+      "USNF_2025_Ghost": { id: "523983", type: "classic" },
+      "USNF_2025_H2H": { id: "524004", type: "h2h" }
+    };
+
+    // Populate Gameweeks (1 to 38) in the dropdown
     function populateGameweeks() {
       let dropdown = document.getElementById("gameweekDropdown");
       for (let i = 1; i <= 38; i++) {
@@ -40,22 +65,33 @@
         option.innerHTML = "Gameweek " + i;
         dropdown.appendChild(option);
       }
+      // Set default Gameweek to the current Gameweek
+      document.getElementById("gameweekDropdown").value = currentGW;
     }
 
+    // Update League Selection
+    function updateLeague() {
+      const selectedLeague = document.getElementById("leagueDropdown").value;
+      fetchDataForLeagueAndGW(selectedLeague, currentGW);
+    }
+
+    // Update Gameweek Selection
     function updateGameweek() {
       const selectedGW = document.getElementById("gameweekDropdown").value;
-      fetchDataForGameweek(selectedGW);
+      const selectedLeague = document.getElementById("leagueDropdown").value;
+      fetchDataForLeagueAndGW(selectedLeague, selectedGW);
     }
 
-    function fetchDataForGameweek(gameweek) {
-      // Fetch the data for the selected Gameweek
-      // Example URL: Replace with actual fetching logic
-      const apiUrl = `https://your-api-endpoint.com/gameweek/${gameweek}`;
+    // Fetch the data for the selected League and Gameweek
+    function fetchDataForLeagueAndGW(league, gameweek) {
+      const leagueData = leagues[league];
+      const apiUrl = `https://fantasy.premierleague.com/api/leagues-${leagueData.type}/${leagueData.id}/standings/`;
 
       fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-          const standingsHTML = data.map(player => `
+          const standings = data.standings ? data.standings.results : [];
+          const standingsHTML = standings.map(player => `
             <tr>
               <td>${player.rank}</td>
               <td>${player.managerName}</td>
@@ -79,12 +115,16 @@
               <tbody>${standingsHTML}</tbody>
             </table>
           `;
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
         });
     }
 
     // Initialize the dropdown on page load
     window.onload = function() {
-      populateGameweeks();
+      populateGameweeks(); // Populate the Gameweek dropdown
+      updateLeague(); // Fetch and display data for the default league and Gameweek
     }
   </script>
 </body>

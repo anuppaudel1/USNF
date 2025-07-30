@@ -12,183 +12,66 @@
     th { background-color: #34495e; color: white; }
     section { margin-bottom: 40px; }
     iframe { width: 100%; height: 600px; border: none; }
+    select { padding: 10px; font-size: 16px; margin: 10px 0; }
   </style>
 </head>
 <body>
   <h1>US Nepal Fantasy Premier League 2025/26</h1>
 
   <section>
-    <h2>📌 League Overview</h2>
-    <p>This is one of the largest Nepalese-based FPL private leagues based on the English Premier League 2025/26 season. All participants must pay their respective entry fees before the FPL Gameweek 1 deadline to remain eligible.</p>
+    <h2>📊 Select League to View Standings</h2>
+    <select id="leagueDropdown" onchange="updateLeague()">
+      <option value="USNF_2025_Classic">Classic League</option>
+      <option value="USNF_2025_Survival">Survival League</option>
+      <option value="USNF_2025_Ghost">Ghost League</option>
+      <option value="USNF_2025_H2H">Head-to-Head League</option>
+    </select>
   </section>
 
   <section>
-    <h2>💰 Entry Fees are representational figures</h2>
-    <ul>
-      <li><strong>Classic League:</strong> $55 ($50 prize + $5 admin) [Mandatory]</li>
-      <li><strong>Survival League:</strong> $35 [Optional]</li>
-      <li><strong>Ghost League:</strong> $30 [Optional - separate FPL team required]</li>
-    </ul>
+    <h2>📊 Live Tracking Dashboard</h2>
+    <div id="leagueContent">
+      <!-- Standings will be dynamically inserted here -->
+    </div>
   </section>
-
-  <section>
-    <h2>🏆 Prize Structure (These are also reprensentational figures)</h2>
-    <h3>Classic League</h3>
-    <ul>
-      <li>1st: $1700</li>
-      <li>2nd: $850</li>
-      <li>3rd: $400</li>
-      <li>4th: $200</li>
-      <li>5th: $100</li>
-      <li>6th–10th: Free Entry</li>
-      <li>Manager of the Week: 38 x $60 = $2280</li>
-      <li>Runner-up: 38 x $25 = $950</li>
-      <li>Manager of the Month: 9 x $100 = $900</li>
-      <li>Highest Score Season: $150</li>
-    </ul>
-
-    <h3>Survival League (These are also reprensentational figures)</h3>
-    <ul>
-      <li>1st: $1200</li>
-      <li>2nd: $600</li>
-      <li>3rd: $300</li>
-      <li>4th: $150</li>
-      <li>5th: $95</li>
-    </ul>
-
-    <h3>Ghost League</h3>
-    <ul>
-      <li>1st: $650</li>
-      <li>2nd: $375</li>
-      <li>3rd: $150</li>
-      <li>4th: $95</li>
-      <li>5th: $50</li>
-    </ul>
-  </section>
-
-  <section>
-  <h2>📊 Live Tracking Dashboard</h2>
-  <p>The tracker below is updated dynamically via Google Sheets</p>
-
-  <style>
-    /* Tab container */
-    .tab {
-      overflow: hidden;
-      border-bottom: 3px solid #ccc;
-      margin-bottom: 10px;
-    }
-
-    /* Tab buttons */
-    .tab button {
-      background-color: #f0f0f0;
-      border: none;
-      outline: none;
-      padding: 14px 20px;
-      cursor: pointer;
-      transition: background-color 0.3s, color 0.3s;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 6px 6px 0 0;
-      margin-right: 6px;
-      color: #444;
-      box-shadow: inset 0 -3px 0 transparent;
-    }
-
-    /* Individual colors for each tab */
-    .tab button.classic {
-      --tab-color: #1e90ff; /* Dodger Blue */
-    }
-    .tab button.h2h {
-      --tab-color: #28a745; /* Green */
-    }
-    .tab button.survival {
-      --tab-color: #ff8c00; /* Dark Orange */
-    }
-    .tab button.ghost {
-      --tab-color: #6f42c1; /* Purple */
-    }
-
-    /* Default tab color */
-    .tab button {
-      border-bottom: 3px solid transparent;
-    }
-
-    /* Active tab styles */
-    .tab button.active {
-      color: white;
-      background-color: var(--tab-color);
-      box-shadow: inset 0 -3px 0 var(--tab-color);
-      border-bottom: 3px solid var(--tab-color);
-    }
-
-    /* Hover effect */
-    .tab button:hover:not(.active) {
-      background-color: #ddd;
-      color: var(--tab-color);
-    }
-
-    /* Tab content styling */
-    .tabcontent {
-      display: none;
-      padding: 10px 0;
-    }
-
-    .tabcontent iframe {
-      width: 100%;
-      height: 600px;
-      border: 1px solid #ccc;
-      border-radius: 0 0 6px 6px;
-      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
-    }
-  </style>
-
-  <div class="tab" role="tablist" aria-label="Fantasy League Tabs">
-    <button class="tablinks classic active" onclick="openLeague(event, 'Classic')" role="tab" aria-selected="true" aria-controls="Classic" id="tab-classic">Classic League</button>
-    <button class="tablinks h2h" onclick="openLeague(event, 'H2H')" role="tab" aria-selected="false" aria-controls="H2H" id="tab-h2h">Head-to-Head League</button>
-    <button class="tablinks survival" onclick="openLeague(event, 'Survival')" role="tab" aria-selected="false" aria-controls="Survival" id="tab-survival">Survival League</button>
-    <button class="tablinks ghost" onclick="openLeague(event, 'Ghost')" role="tab" aria-selected="false" aria-controls="Ghost" id="tab-ghost">Ghost League</button>
-  </div>
-
-  <div id="Classic" class="tabcontent" role="tabpanel" aria-labelledby="tab-classic" style="display: block;">
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDnaHPLvrMsTxr-8N5bTY0Ci8EDgRFdCDMvHvkXIGfwAWaBCzHShf4rvjyoiNqwqfnYKRa5BtraDQg/pubhtml?gid=1210337705&single=true&widget=true&headers=false" title="Classic League Standings"></iframe>
-  </div>
-
-  <div id="H2H" class="tabcontent" role="tabpanel" aria-labelledby="tab-h2h">
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDnaHPLvrMsTxr-8N5bTY0Ci8EDgRFdCDMvHvkXIGfwAWaBCzHShf4rvjyoiNqwqfnYKRa5BtraDQg/pubhtml?gid=362602962&single=true&widget=true&headers=false" title="Head-to-Head League Standings"></iframe>
-  </div>
-
-  <div id="Survival" class="tabcontent" role="tabpanel" aria-labelledby="tab-survival">
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDnaHPLvrMsTxr-8N5bTY0Ci8EDgRFdCDMvHvkXIGfwAWaBCzHShf4rvjyoiNqwqfnYKRa5BtraDQg/pubhtml?gid=1113021135&single=true&widget=true&headers=false" title="Survival League Standings"></iframe>
-  </div>
-
-  <div id="Ghost" class="tabcontent" role="tabpanel" aria-labelledby="tab-ghost">
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQDnaHPLvrMsTxr-8N5bTY0Ci8EDgRFdCDMvHvkXIGfwAWaBCzHShf4rvjyoiNqwqfnYKRa5BtraDQg/pubhtml?gid=1404348850&single=true&widget=true&headers=false" title="Ghost League Standings"></iframe>
-  </div>
 
   <script>
-    function openLeague(evt, leagueName) {
-      // Hide all tabcontent
-      const tabcontent = document.querySelectorAll('.tabcontent');
-      tabcontent.forEach(tc => tc.style.display = 'none');
+    function updateLeague() {
+      const league = document.getElementById('leagueDropdown').value;
+      const sheetId = '2PACX-1vSI911PyBLR6GtBYaHjHZ6sOBcviXLs7vYtmfgPe1aGljDDY6AvqRaMOYNtatZ7bCI1JOfgMSXnN1mX';  // Replace with your Google Sheet ID
+      const range = `${league}!A2:H`; // Adjust range for each league sheet
 
-      // Remove active class and update aria-selected for all tabs
-      const tablinks = document.querySelectorAll('.tablinks');
-      tablinks.forEach(tl => {
-        tl.classList.remove('active');
-        tl.setAttribute('aria-selected', 'false');
-      });
+      const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=your-google-api-key`;  // Replace with your Google API Key
 
-      // Show selected tabcontent and set active class and aria-selected
-      document.getElementById(leagueName).style.display = 'block';
-      evt.currentTarget.classList.add('active');
-      evt.currentTarget.setAttribute('aria-selected', 'true');
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const rows = data.values;
+          let tableHTML = '<table><thead><tr><th>Rank</th><th>Manager</th><th>Points</th><th>Gameweek</th><th>GW Winner (1st)</th><th>GW Winner (2nd)</th><th>Monthly Winner</th><th>Highest GW Score</th></tr></thead><tbody>';
+
+          rows.forEach(row => {
+            tableHTML += `<tr>
+              <td>${row[0]}</td>
+              <td>${row[1]}</td>
+              <td>${row[2]}</td>
+              <td>${row[3]}</td>
+              <td>${row[4]}</td>
+              <td>${row[5]}</td>
+              <td>${row[6]}</td>
+              <td>${row[7]}</td>
+            </tr>`;
+          });
+
+          tableHTML += '</tbody></table>';
+          document.getElementById('leagueContent').innerHTML = tableHTML;
+        })
+        .catch(error => console.error('Error fetching data:', error));
     }
-  </script>
-</section>
 
-  <section>
-    <h2>📞 Contact</h2>
-    <p>For payment, FPL codes, or queries, please contact the US Nepal Fantasy League Team on WhatsApp or Facebook.</p>
-  </section>
+    // Initial load
+    window.onload = function() {
+      updateLeague();
+    };
+  </script>
 </body>
 </html>

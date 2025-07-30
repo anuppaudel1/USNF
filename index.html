@@ -11,7 +11,6 @@
     th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
     th { background-color: #34495e; color: white; }
     section { margin-bottom: 40px; }
-    iframe { width: 100%; height: 600px; border: none; }
     select { padding: 10px; font-size: 16px; margin: 10px 0; }
   </style>
 </head>
@@ -19,12 +18,9 @@
   <h1>US Nepal Fantasy Premier League 2025/26</h1>
 
   <section>
-    <h2>📊 Select League to View Standings</h2>
-    <select id="leagueDropdown" onchange="updateLeague()">
-      <option value="USNF_2025_Classic">Classic League</option>
-      <option value="USNF_2025_Survival">Survival League</option>
-      <option value="USNF_2025_Ghost">Ghost League</option>
-      <option value="USNF_2025_H2H">Head-to-Head League</option>
+    <h2>📊 Select Gameweek to View Standings</h2>
+    <select id="gameweekDropdown" onchange="updateGameweek()">
+      <!-- Gameweek Options will be added dynamically -->
     </select>
   </section>
 
@@ -36,42 +32,60 @@
   </section>
 
   <script>
-    function updateLeague() {
-      const league = document.getElementById('leagueDropdown').value;
-      const sheetId = '1s3-MGoUrN3YR8eoIfJbDT7rQ_8cvL4VAPZy5vozMmFk'; // Your Google Sheet ID
-const range = `${league}!A2:H`; // Adjust range for each league sheet
+    function populateGameweeks() {
+      let dropdown = document.getElementById("gameweekDropdown");
+      for (let i = 1; i <= 38; i++) {
+        let option = document.createElement("option");
+        option.value = i;
+        option.innerHTML = "Gameweek " + i;
+        dropdown.appendChild(option);
+      }
+    }
 
-const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=AIzaSyCnhIfcVJB3Id9XcDBTthXmB3TaURmXPaQ`;  // Replace with your Google API Key
+    function updateGameweek() {
+      const selectedGW = document.getElementById("gameweekDropdown").value;
+      fetchDataForGameweek(selectedGW);
+    }
+
+    function fetchDataForGameweek(gameweek) {
+      // Fetch the data for the selected Gameweek
+      // Example URL: Replace with actual fetching logic
+      const apiUrl = `https://your-api-endpoint.com/gameweek/${gameweek}`;
 
       fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-          const rows = data.values;
-          let tableHTML = '<table><thead><tr><th>Rank</th><th>Manager</th><th>Points</th><th>Gameweek</th><th>GW Winner (1st)</th><th>GW Winner (2nd)</th><th>Monthly Winner</th><th>Highest GW Score</th></tr></thead><tbody>';
+          const standingsHTML = data.map(player => `
+            <tr>
+              <td>${player.rank}</td>
+              <td>${player.managerName}</td>
+              <td>${player.teamName}</td>
+              <td>${player.points}</td>
+              <td>${player.gwScore}</td>
+            </tr>
+          `).join('');
 
-          rows.forEach(row => {
-            tableHTML += `<tr>
-              <td>${row[0]}</td>
-              <td>${row[1]}</td>
-              <td>${row[2]}</td>
-              <td>${row[3]}</td>
-              <td>${row[4]}</td>
-              <td>${row[5]}</td>
-              <td>${row[6]}</td>
-              <td>${row[7]}</td>
-            </tr>`;
-          });
-
-          tableHTML += '</tbody></table>';
-          document.getElementById('leagueContent').innerHTML = tableHTML;
-        })
-        .catch(error => console.error('Error fetching data:', error));
+          document.getElementById('leagueContent').innerHTML = `
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Manager</th>
+                  <th>Team</th>
+                  <th>Points</th>
+                  <th>GW Score</th>
+                </tr>
+              </thead>
+              <tbody>${standingsHTML}</tbody>
+            </table>
+          `;
+        });
     }
 
-    // Initial load
+    // Initialize the dropdown on page load
     window.onload = function() {
-      updateLeague();
-    };
+      populateGameweeks();
+    }
   </script>
 </body>
 </html>

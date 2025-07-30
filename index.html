@@ -125,7 +125,7 @@
         </div>
 
         <div>
-          <label for="gameweekDropdown">Select Gameweek: </label>
+          <label for="gameweekDropdown">Select GW: </label>
           <select id="gameweekDropdown" disabled>
             <!-- Gameweek Options will be added dynamically -->
           </select>
@@ -170,7 +170,7 @@
       for (let i = 1; i <= 38; i++) {
         let option = document.createElement("option");
         option.value = i;
-        option.innerHTML = "Gameweek " + i;
+        option.innerHTML = "GW " + i;
         dropdown.appendChild(option);
       }
       // Set default Gameweek to the current Gameweek

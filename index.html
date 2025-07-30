@@ -38,10 +38,10 @@
   <script>
     function updateLeague() {
       const league = document.getElementById('leagueDropdown').value;
-      const sheetId = '2PACX-1vSI911PyBLR6GtBYaHjHZ6sOBcviXLs7vYtmfgPe1aGljDDY6AvqRaMOYNtatZ7bCI1JOfgMSXnN1mX';  // Replace with your Google Sheet ID
-      const range = `${league}!A2:H`; // Adjust range for each league sheet
+      const sheetId = '1s3-MGoUrN3YR8eoIfJbDT7rQ_8cvL4VAPZy5vozMmFk'; // Your Google Sheet ID
+const range = `${league}!A2:H`; // Adjust range for each league sheet
 
-      const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=your-google-api-key`;  // Replace with your Google API Key
+const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=AIzaSyCnhIfcVJB3Id9XcDBTthXmB3TaURmXPaQ`;  // Replace with your Google API Key
 
       fetch(apiUrl)
         .then(response => response.json())

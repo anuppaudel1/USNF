@@ -91,6 +91,11 @@
       background-color: #eaeaea;
     }
 
+    .highlight {
+      font-weight: bold;
+      background-color: #d4edda; /* Light green background for winners */
+    }
+
     /* Section padding */
     section {
       padding: 30px;
@@ -112,7 +117,7 @@
     <h1>US Nepal Fantasy Premier League 2025/26</h1>
 
     <section>
-      <h2>📊 Select League and Gameweek to View Standings</h2>
+      <h2>📊 Select League to View Standings</h2>
       <div class="dropdown-container">
         <div>
           <label for="leagueDropdown">Select League: </label>
@@ -125,8 +130,8 @@
         </div>
 
         <div>
-          <label for="gameweekDropdown">Select GW: </label>
-          <select id="gameweekDropdown" disabled>
+          <label for="gameweekDropdown">Select Gameweek: </label>
+          <select id="gameweekDropdown" onchange="updateGameweek()" disabled>
             <!-- Gameweek Options will be added dynamically -->
           </select>
         </div>
@@ -144,7 +149,7 @@
 
   <script>
     // FPL Season Start Date (adjust if necessary for the exact year)
-    const seasonStartDate = new Date('2025-08-11'); // Assuming the 2025/26 season starts on August 11, 2025
+    const seasonStartDate = new Date('2025-08-11'); // Set to start of your season
     const currentDate = new Date();
     
     // Calculate the number of days between the current date and the season start date
@@ -154,7 +159,7 @@
     const daysSinceStart = timeDiff / (1000 * 3600 * 24);
     
     // Calculate the current Gameweek (round it to the nearest whole number)
-    const currentGW = Math.floor(daysSinceStart / 7) + 1; // Each GW is approximately 7 days long
+    const currentGW = Math.floor(daysSinceStart / 7) + 1; // Each Gameweek is approximately 7 days long
     
     // League data mapping
     const leagues = {
@@ -170,7 +175,7 @@
       for (let i = 1; i <= 38; i++) {
         let option = document.createElement("option");
         option.value = i;
-        option.innerHTML = "GW " + i;
+        option.innerHTML = "Gameweek " + i;
         dropdown.appendChild(option);
       }
       // Set default Gameweek to the current Gameweek
@@ -186,6 +191,13 @@
       fetchDataForLeagueAndGW(selectedLeague, currentGW);
     }
 
+    // Update Gameweek Selection
+    function updateGameweek() {
+      const selectedGW = document.getElementById("gameweekDropdown").value;
+      const selectedLeague = document.getElementById("leagueDropdown").value;
+      fetchDataForLeagueAndGW(selectedLeague, selectedGW);
+    }
+
     // Fetch the data for the selected League and Gameweek
     function fetchDataForLeagueAndGW(league, gameweek) {
       const leagueData = leagues[league];
@@ -195,15 +207,18 @@
         .then(response => response.json())
         .then(data => {
           const standings = data.standings ? data.standings.results : [];
-          const standingsHTML = standings.map(player => `
-            <tr>
-              <td>${player.rank}</td>
-              <td>${player.managerName}</td>
-              <td>${player.teamName}</td>
-              <td>${player.points}</td>
-              <td>${player.gwScore}</td>
-            </tr>
-          `).join('');
+          const standingsHTML = standings.map(player => {
+            const isWinner = player.points === Math.max(...standings.map(p => p.points)); // Find the top scorer
+            return `
+              <tr class="${isWinner ? 'highlight' : ''}">
+                <td>${player.rank}</td>
+                <td>${player.managerName}</td>
+                <td>${player.teamName}</td>
+                <td>${player.points}</td>
+                <td>${player.netTotal}</td> <!-- Display Net Total -->
+              </tr>
+            `;
+          }).join('');
 
           document.getElementById('leagueContent').innerHTML = `
             <table>
@@ -213,7 +228,7 @@
                   <th>Manager</th>
                   <th>Team</th>
                   <th>Points</th>
-                  <th>GW Score</th>
+                  <th>Net Total</th>
                 </tr>
               </thead>
               <tbody>${standingsHTML}</tbody>
